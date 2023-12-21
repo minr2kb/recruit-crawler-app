@@ -23,7 +23,7 @@ interface Props {
   categories?: CategoryFilterType[]
 }
 
-function PlatformSection({ platform, categories = [] }: Props) {
+function PlatformBlock({ platform, categories = [] }: Props) {
   const [selectedPlatforms, setSelectedPlatforms] = useAtom(selectedPlatformsState)
   const [selectedCategories, setSelectedCategories] = useAtom(selectedCategoriesState)
   const [open, setOpen] = useState<boolean>(false)
@@ -129,4 +129,4 @@ function PlatformSection({ platform, categories = [] }: Props) {
   )
 }
 
-export default PlatformSection
+export default PlatformBlock
