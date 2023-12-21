@@ -1,0 +1,11 @@
+{
+  "include": [".eslintrc.cjs"],
+  "compilerOptions": {
+    "types": ["@types/node"],
+    "noEmit": true,
+    "allowJs": true,
+    "strictNullChecks":true,
+    "strict": true
+
+  }
+}

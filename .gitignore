@@ -2,5 +2,4 @@ node_modules
 dist
 out
 *.log*
-build
 src/renderer/src/api/consts.ts
