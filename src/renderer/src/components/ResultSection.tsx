@@ -1,3 +1,4 @@
+/* eslint-disable no-alert */
 /* eslint-disable @typescript-eslint/no-misused-promises */
 /* eslint-disable no-console */
 import { Check, Download, Error } from '@mui/icons-material'
@@ -11,6 +12,7 @@ import {
   CircularProgress,
   Grid,
   Paper,
+  Tooltip,
   Typography
 } from '@mui/material'
 
@@ -68,12 +70,18 @@ function ResultSection() {
     const promises =
       selectedCategories[platform]?.map(async (cate) => {
         const data = await getFunc(platform)(cate.label, String(cate.value), limitMonths)
-        console.log('data', data)
         setCrawlResults((prev) => ({ ...prev, [`${platform}_${cate.label}`]: data }))
         return data
       }) ?? []
 
+    const timeoutId = setTimeout(() => {
+      window.alert(
+        '15초가 경과했습니다. 만약 개월 수 대비 비정상적으로 오래 걸린다면 새로고침을 해주세요.'
+      )
+    }, 15 * 1000)
+
     const results = await Promise.all(promises)
+    clearTimeout(timeoutId) // 작업이 완료되면 타이머를 제거합니다.
     const fullData = ([] as ResultType[]).concat(...results)
     setCrawlResults((prev) => ({ ...prev, [`${platform}_ALL`]: fullData }))
     return fullData
@@ -99,7 +107,7 @@ function ResultSection() {
       console.log('\n\n####### ✨ Done ✨ #######\n\n')
       console.timeLog('⏱️ Total time spent')
     } catch (err) {
-      console.error('🛑 ERROR OCCURED', err)
+      window.alert('🛑 ERROR OCCURED')
     }
   }
 
@@ -120,16 +128,41 @@ function ResultSection() {
     <Paper variant="outlined" sx={{ p: 3, border: 'none' }}>
       <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', mb: 2 }}>
         <Typography variant="h5">Result</Typography>
-        <Button
-          variant="contained"
-          onClick={onClickStart}
-          disabled={
-            isCrawling ||
-            Object.values(selectedCategories).some((cates) => (cates?.length ?? 0) < 1)
-          }
-        >
-          START
-        </Button>
+        <Box display="flex">
+          {crawlResults?.[RECRUITS_ALL_KEY] ? (
+            <CSVLink
+              filename={`${RECRUITS_ALL_KEY}.csv`}
+              data={crawlResults?.[RECRUITS_ALL_KEY] ?? []}
+              headers={selectedFields}
+            >
+              <Button fullWidth size="small" disabled={!crawlResults?.[RECRUITS_ALL_KEY]}>
+                {RECRUITS_ALL_KEY}.csv
+                <Download fontSize="small" />
+              </Button>
+            </CSVLink>
+          ) : (
+            <Tooltip title="크롤링을 먼저 실행해주세요.">
+              <Box>
+                <Button fullWidth size="small" disabled>
+                  {RECRUITS_ALL_KEY}.csv
+                  <Download fontSize="small" />
+                </Button>
+              </Box>
+            </Tooltip>
+          )}
+          <Tooltip title="크롤링 시작">
+            <Box>
+              <Button
+                variant="contained"
+                onClick={onClickStart}
+                disabled={isCrawling || Object.values(selectedCategories).length < 1}
+                sx={{ ml: 1 }}
+              >
+                START
+              </Button>
+            </Box>
+          </Tooltip>
+        </Box>
       </Box>
       <Grid container spacing={2}>
         {selectedPlatforms?.length === 0 && (
