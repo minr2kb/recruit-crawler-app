@@ -1,5 +1,5 @@
-import { InfoOutlined } from '@mui/icons-material'
-import { Box, IconButton, Typography } from '@mui/material'
+import { InfoOutlined, RefreshOutlined } from '@mui/icons-material'
+import { Box, IconButton, Tooltip, Typography } from '@mui/material'
 import { useState } from 'react'
 import useIsScrolled from '../hooks/useIsScrolled'
 import FontWeightValues from '../utils/fontTypes'
@@ -17,7 +17,7 @@ function HeaderSection() {
         width: '100%',
         backdropFilter: 'blur(10px)',
         zIndex: 100,
-        bgcolor: 'rgba(255,255,255,0.6)',
+        bgcolor: 'rgba(255,255,255,0.7)',
         boxShadow: isScrolled ? '0px 0px 10px 4px rgba(0,0,0,0.1)' : 'none',
         transition: 'all ease-in-out 0.3s'
       }}
@@ -43,13 +43,26 @@ function HeaderSection() {
         >
           Recruit Crawler V2
         </Typography>
-        <IconButton
-          onClick={() => {
-            setOpenInfo(true)
-          }}
-        >
-          <InfoOutlined />
-        </IconButton>
+        <Box display="flex">
+          <Tooltip title="새로고침">
+            <IconButton
+              onClick={() => {
+                window.location.reload()
+              }}
+            >
+              <RefreshOutlined />
+            </IconButton>
+          </Tooltip>
+          <Tooltip title="도움말">
+            <IconButton
+              onClick={() => {
+                setOpenInfo(true)
+              }}
+            >
+              <InfoOutlined />
+            </IconButton>
+          </Tooltip>
+        </Box>
       </Box>
       <InformationModal
         open={openInfo}
