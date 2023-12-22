@@ -10,6 +10,7 @@ export const getPostsFromJumpit = async (position: string, cateKey: string, mont
     return res.data
   } catch (e) {
     console.error(e)
+    window.alert('Jumpit에서 데이터를 가져오는데 실패했습니다.')
     return []
   }
 }
@@ -26,6 +27,7 @@ export const getPostsFromProgrammers = async (
     return res.data
   } catch (e) {
     console.error(e)
+    window.alert('Programmers에서 데이터를 가져오는데 실패했습니다.')
     return []
   }
 }
@@ -41,6 +43,7 @@ export const getPostsFromJobplanet = async (position: string, cateKey: string, m
     return res.data
   } catch (e) {
     console.error(e)
+    window.alert('Jobplanet에서 데이터를 가져오는데 실패했습니다.')
     return []
   }
 }
@@ -53,6 +56,7 @@ export const getPostsFromWanted = async (position: string, cateKey: string) => {
     return res.data
   } catch (e) {
     console.error(e)
+    window.alert('Wanted에서 데이터를 가져오는데 실패했습니다.')
     return []
   }
 }
@@ -65,6 +69,7 @@ export const getPostsFromRemember = async (position: string, cateKey: string, mo
     return res.data
   } catch (e) {
     console.error(e)
+    window.alert('Remember에서 데이터를 가져오는데 실패했습니다.')
     return []
   }
 }

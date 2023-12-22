@@ -1,3 +1,5 @@
+/* eslint-disable no-console */
+/* eslint-disable no-alert */
 /* eslint-disable consistent-return */
 
 import axios from 'axios'
@@ -49,11 +51,15 @@ const getPostsFromJobplanet = async (position: string, cateKey: string, month?: 
       }
       return targetData
     })
-
-    const results = await Promise.all(promises)
-    results.forEach((data) => {
-      if (data) result.push(data)
-    })
+    try {
+      const results = await Promise.all(promises)
+      results.forEach((data) => {
+        if (data) result.push(data)
+      })
+    } catch (e) {
+      window.alert('Jobplanet에서 데이터를 가져오는데 실패했습니다.')
+      console.error(e)
+    }
   }
   return result.sort(
     (a, b) => new Date(b.updatedDate).valueOf() - new Date(a.updatedDate).valueOf()

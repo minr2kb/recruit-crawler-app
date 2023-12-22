@@ -107,6 +107,7 @@ function ResultSection() {
       console.log('\n\n####### ✨ Done ✨ #######\n\n')
       console.timeLog('⏱️ Total time spent')
     } catch (err) {
+      setIsCrawling(false)
       window.alert('🛑 ERROR OCCURED')
     }
   }
@@ -155,7 +156,7 @@ function ResultSection() {
               <Button
                 variant="contained"
                 onClick={onClickStart}
-                disabled={isCrawling || Object.values(selectedCategories).length < 1}
+                disabled={isCrawling || selectedPlatforms.length < 1}
                 sx={{ ml: 1 }}
               >
                 START
