@@ -34,15 +34,26 @@ function HeaderSection() {
           justifyContent: 'space-between'
         }}
       >
-        <Typography
-          color="text.secondary"
-          fontWeight={FontWeightValues.SEMI_BOLD}
-          sx={{
-            fontSize: 24
-          }}
-        >
-          Recruit Crawler V2
-        </Typography>
+        <Box display="flex">
+          <Typography
+            color="text.secondary"
+            fontWeight={FontWeightValues.SEMI_BOLD}
+            sx={{
+              fontSize: 24
+            }}
+          >
+            Recruit Crawler
+          </Typography>
+          <Typography
+            color="text.secondary"
+            sx={{
+              fontSize: 12,
+              ml: 0.5
+            }}
+          >
+            v1.1.0
+          </Typography>
+        </Box>
         <Box display="flex">
           <Tooltip title="새로고침">
             <IconButton
