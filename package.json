@@ -1,9 +1,10 @@
 {
   "name": "recruit-crawler-app",
-  "version": "1.2.0",
+  "version": "1.2.1",
   "description": "An Electron application for recruit-crawler-v2",
   "main": "./out/main/index.js",
   "author": "Kyungbae Min",
+  "license":"ISC",
   "repository": {
     "type": "git",
     "url": "https://github.com/minr2kb/recruit-crawler-app.git"

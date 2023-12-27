@@ -8,7 +8,7 @@ import InformationModal from './InformationModal'
 function HeaderSection() {
   const [openInfo, setOpenInfo] = useState(false)
   const isScrolled = useIsScrolled()
-  const version = 'v1.2.0'
+  const version = 'v1.2.1'
   return (
     <Box
       sx={{

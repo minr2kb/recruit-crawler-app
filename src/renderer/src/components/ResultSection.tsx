@@ -17,7 +17,7 @@ import {
 } from '@mui/material'
 
 import { useAtomValue } from 'jotai'
-import { useCallback, useState } from 'react'
+import { useCallback, useRef, useState } from 'react'
 import { CSVLink } from 'react-csv'
 
 import {
@@ -44,33 +44,40 @@ function ResultSection() {
   const selectedFields = useAtomValue(selectedFieldsState)
   const limitMonths = useAtomValue(limitMonthsState)
 
+  const controllerRef = useRef<AbortController>()
+
   const [crawlResults, setCrawlResults] = useState<TotalResultType>()
   const [isCrawling, setIsCrawling] = useState<boolean>(false)
 
   const getFunc = (
-    platform: Platforms
+    platform: Platforms,
+    controller: AbortController
   ): ((position: string, cateKey: string, month?: number) => Promise<ResultType[]>) => {
     switch (platform) {
       case Platforms.JUMPIT:
-        return getPostsFromJumpit
+        return getPostsFromJumpit(controller)
       case Platforms.PROGRAMMERS:
-        return getPostsFromProgrammers
+        return getPostsFromProgrammers(controller)
       case Platforms.JOBPLANET:
-        return getPostsFromJobplanet
+        return getPostsFromJobplanet(controller)
       case Platforms.WANTED:
-        return getPostsFromWanted
+        return getPostsFromWanted(controller)
       case Platforms.REMEMBER:
-        return getPostsFromRemember
+        return getPostsFromRemember(controller)
       default:
         return async () => []
     }
   }
 
-  const getPostsAsync = async (platform: Platforms) => {
+  const getPostsAsync = async (platform: Platforms, controller: AbortController) => {
     const promises =
       selectedCategories[platform]?.map(async (cate) => {
         try {
-          const data = await getFunc(platform)(cate.label, String(cate.value), limitMonths)
+          const data = await getFunc(platform, controller)(
+            cate.label,
+            String(cate.value),
+            limitMonths
+          )
           setCrawlResults((prev) => ({ ...prev, [`${platform}_${cate.label}`]: data }))
           return data
         } catch (err) {
@@ -86,20 +93,24 @@ function ResultSection() {
     return fullData
   }
 
-  const getPosts = async (platform: Platforms) => {
+  const getPosts = async (platform: Platforms, controller: AbortController) => {
     const fullData = [] as ResultType[]
 
     const selectedCategory = selectedCategories[platform]
 
     if (selectedCategory && selectedCategory.length <= 3) {
       // eslint-disable-next-line no-return-await
-      return await getPostsAsync(platform)
+      return await getPostsAsync(platform, controller)
     }
 
     if (selectedCategory) {
       for (const cate of selectedCategory) {
         try {
-          const data = await getFunc(platform)(cate.label, String(cate.value), limitMonths)
+          const data = await getFunc(platform, controller)(
+            cate.label,
+            String(cate.value),
+            limitMonths
+          )
           setCrawlResults((prev) => ({ ...prev, [`${platform}_${cate.label}`]: data }))
           if (data !== null) {
             fullData.push(...data)
@@ -120,10 +131,12 @@ function ResultSection() {
       console.log('\n\n####### 🚗 Initializing 🚗 #######\n\n')
       setIsCrawling(true)
       setCrawlResults({})
+      const abortController = new AbortController()
+      controllerRef.current = abortController
 
       const promises = selectedPlatforms.map(
         // eslint-disable-next-line no-return-await
-        async (selectedPlatform) => await getPosts(selectedPlatform)
+        async (selectedPlatform) => await getPosts(selectedPlatform, abortController)
       )
 
       const results = await Promise.all(promises)
@@ -138,6 +151,12 @@ function ResultSection() {
       setIsCrawling(false)
       window.alert('🛑 ERROR OCCURED')
     }
+  }
+
+  const onClickStop = () => {
+    controllerRef.current?.abort()
+    setIsCrawling(false)
+    setCrawlResults({})
   }
 
   const getStateIcon = useCallback(
@@ -181,18 +200,28 @@ function ResultSection() {
               </Box>
             </Tooltip>
           )}
-          <Tooltip title="크롤링 시작">
-            <Box>
-              <Button
-                variant="contained"
-                onClick={onClickStart}
-                disabled={isCrawling || selectedPlatforms.length < 1}
-                sx={{ ml: 1 }}
-              >
-                START
-              </Button>
-            </Box>
-          </Tooltip>
+          {isCrawling ? (
+            <Tooltip title="크롤링 시작">
+              <Box>
+                <Button variant="contained" color="error" onClick={onClickStop} sx={{ ml: 1 }}>
+                  STOP
+                </Button>
+              </Box>
+            </Tooltip>
+          ) : (
+            <Tooltip title="크롤링 시작">
+              <Box>
+                <Button
+                  variant="contained"
+                  onClick={onClickStart}
+                  disabled={isCrawling || selectedPlatforms.length < 1}
+                  sx={{ ml: 1 }}
+                >
+                  START
+                </Button>
+              </Box>
+            </Tooltip>
+          )}
         </Box>
       </Box>
       <Grid container spacing={2}>
@@ -205,9 +234,17 @@ function ResultSection() {
         )}
         {selectedPlatforms.map((platform) => (
           <Grid item xs={12} sm={6} key={`selected-platform-${platform}`}>
-            <Card variant="outlined">
+            <Card
+              variant="outlined"
+              sx={{ height: '100%', display: 'flex', flexDirection: 'column' }}
+            >
               <CardContent
-                sx={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-start' }}
+                sx={{
+                  display: 'flex',
+                  flexDirection: 'column',
+                  alignItems: 'flex-start',
+                  flex: 1
+                }}
               >
                 <Typography gutterBottom variant="subtitle1" component="div">
                   {platform}

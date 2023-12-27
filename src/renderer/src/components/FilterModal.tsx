@@ -8,6 +8,7 @@ import {
   DialogContent,
   DialogTitle,
   Divider,
+  Grid,
   List,
   ListItem,
   ListItemButton,
@@ -88,50 +89,61 @@ function FilterModal({ data, open, handleClose, onSave, initVal = [] }: Props) {
           />
         ))}
       </DialogTitle>
-      <DialogContent dividers sx={{ display: 'flex', p: 0, minHeight: 500 }}>
-        <List disablePadding style={{ width: '50%' }}>
-          {data.map((item) => {
-            const selectedCount = getSelectedCount(item)
-            return (
-              <ListItem
-                key={item.label}
-                disablePadding
-                onClick={() => {
-                  handleDepth1Click(item)
-                }}
-              >
-                <ListItemButton>
-                  <ListItemText primary={`${item.label} (${item.children?.length ?? 0})`} />
-                  {(item.children?.length ?? 0) > 0 && (
-                    <>
-                      {selectedCount > 0 && <Chip size="small" label={selectedCount} />}
-                      <ArrowForwardIosIcon
-                        color={selectedDepth1?.label === item.label ? 'primary' : 'disabled'}
-                        fontSize="small"
-                      />
-                    </>
-                  )}
-                </ListItemButton>
-              </ListItem>
-            )
-          })}
-        </List>
-        <Divider orientation="vertical" flexItem />
-        <List style={{ width: '50%' }}>
-          {selectedDepth1?.children?.map((child) => (
-            <ListItem
-              key={child.label}
-              role={undefined}
-              dense
-              onClick={() => {
-                handleToggle(child)
-              }}
-            >
-              <Checkbox edge="start" checked={isSelected(child)} tabIndex={-1} disableRipple />
-              <ListItemText primary={child.label} />
-            </ListItem>
-          ))}
-        </List>
+      <DialogContent
+        dividers
+        sx={{ position: 'static', display: 'flex', p: 0, minHeight: '50vh', overflow: 'hidden' }}
+      >
+        <Grid container>
+          <Grid item xs={6} sx={{ height: '100%', overflow: 'auto' }}>
+            <List disablePadding>
+              {data.map((item) => {
+                const selectedCount = getSelectedCount(item)
+                return (
+                  <ListItem
+                    key={item.label}
+                    disablePadding
+                    onClick={() => {
+                      handleDepth1Click(item)
+                    }}
+                  >
+                    <ListItemButton>
+                      <ListItemText primary={`${item.label} (${item.children?.length ?? 0})`} />
+                      {(item.children?.length ?? 0) > 0 && (
+                        <>
+                          {selectedCount > 0 && <Chip size="small" label={selectedCount} />}
+                          <ArrowForwardIosIcon
+                            color={selectedDepth1?.label === item.label ? 'primary' : 'disabled'}
+                            fontSize="small"
+                          />
+                        </>
+                      )}
+                    </ListItemButton>
+                  </ListItem>
+                )
+              })}
+            </List>
+          </Grid>
+
+          <Divider orientation="vertical" flexItem sx={{ ml: '-1px' }} />
+
+          <Grid item xs={6} sx={{ height: '100%', overflow: 'auto' }}>
+            <List disablePadding>
+              {selectedDepth1?.children?.map((child) => (
+                <ListItem
+                  key={child.label}
+                  role={undefined}
+                  dense
+                  onClick={() => {
+                    handleToggle(child)
+                  }}
+                >
+                  <Checkbox edge="start" checked={isSelected(child)} tabIndex={-1} disableRipple />
+                  <ListItemText primary={child.label} />
+                </ListItem>
+              ))}
+            </List>
+          </Grid>
+        </Grid>
       </DialogContent>
       <DialogActions>
         <Button variant="outlined" onClick={handleClose}>
