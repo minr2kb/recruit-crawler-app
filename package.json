@@ -1,6 +1,6 @@
 {
   "name": "recruit-crawler-app",
-  "version": "1.2.1",
+  "version": "1.2.2",
   "description": "An Electron application for recruit-crawler-v2",
   "main": "./out/main/index.js",
   "author": "Kyungbae Min",

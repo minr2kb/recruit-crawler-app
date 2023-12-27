@@ -65,7 +65,19 @@ autoUpdater.on('update-available', () => {
     .then((result) => {
       const { response } = result
 
-      if (response === 0) autoUpdater.downloadUpdate()
+      if (response === 0) {
+        autoUpdater.downloadUpdate()
+        progressBar = new ProgressBar({
+          text: '업데이트 다운로드 중...'
+        })
+        progressBar
+          .on('completed', () => {
+            log.info('설치 완료')
+          })
+          .on('aborted', () => {
+            log.info('aborted')
+          })
+      }
     })
 })
 autoUpdater.on('update-not-available', () => {
@@ -78,17 +90,7 @@ autoUpdater.on('download-progress', (progressObj) => {
   let logMessage = `다운로드 속도: ${progressObj.bytesPerSecond}`
   logMessage = `${logMessage} - 현재 ${progressObj.percent}%`
   logMessage = `${logMessage} (${progressObj.transferred}/${progressObj.total})`
-  progressBar = new ProgressBar({
-    text: 'Download 합니다.'
-  })
 
-  progressBar
-    .on('completed', () => {
-      log.info('설치 완료')
-    })
-    .on('aborted', () => {
-      log.info('aborted')
-    })
   log.info(logMessage)
 })
 autoUpdater.on('update-downloaded', () => {
