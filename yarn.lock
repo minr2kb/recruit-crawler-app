@@ -1994,6 +1994,18 @@ electron-builder@^24.6.3:
     simple-update-notifier "2.0.0"
     yargs "^17.6.2"
 
+electron-log@^5.0.2:
+  version "5.0.2"
+  resolved "https://registry.yarnpkg.com/electron-log/-/electron-log-5.0.2.tgz#6dae26cb7fce9feaa4605d575e02fee75da7b085"
+  integrity sha512-uzUXpUGZ5lJeCEIn4Hrxt6zQWiURu+EbFyTul0Y81huc6UrvWXIOMx4WxNdaGJYWPk9YLWrz2dQf3894MoZKXw==
+
+electron-progressbar@^2.1.0:
+  version "2.1.0"
+  resolved "https://registry.yarnpkg.com/electron-progressbar/-/electron-progressbar-2.1.0.tgz#12cc2a652f9b12a408b7a1e623fb4eb62c9fc645"
+  integrity sha512-F2/xVYxmcbmvqXtlD7d1xbq9320ILutVZf0SDpvb55SDreBiCJTH5ctz7/0FD85cW4mxITNh9u8CStZgcEA3Ag==
+  dependencies:
+    extend "^3.0.1"
+
 electron-publish@24.8.1:
   version "24.8.1"
   resolved "https://registry.yarnpkg.com/electron-publish/-/electron-publish-24.8.1.tgz#4216740372bf4297a429543402a1a15ce8c3560b"
@@ -2012,7 +2024,7 @@ electron-to-chromium@^1.4.601:
   resolved "https://registry.yarnpkg.com/electron-to-chromium/-/electron-to-chromium-1.4.615.tgz#b1c41839962d2e4e63dca05519da9040e34848c2"
   integrity sha512-/bKPPcgZVUziECqDc+0HkT87+0zhaWSZHNXqF8FLd2lQcptpmUFwoCSWjCdOng9Gdq+afKArPdEg/0ZW461Eng==
 
-electron-updater@^6.1.1:
+electron-updater@^6.1.7:
   version "6.1.7"
   resolved "https://registry.yarnpkg.com/electron-updater/-/electron-updater-6.1.7.tgz#7ebd5fb0dde6372309bdfa8031e8eac3817f9955"
   integrity sha512-SNOhYizjkm4ET+Y8ilJyUzcVsFJDtINzVN1TyHnZeMidZEG3YoBebMyXc/J6WSiXdUaOjC7ngekN6rNp6ardHA==
@@ -2528,6 +2540,11 @@ execa@^7.1.1:
     onetime "^6.0.0"
     signal-exit "^3.0.7"
     strip-final-newline "^3.0.0"
+
+extend@^3.0.1:
+  version "3.0.2"
+  resolved "https://registry.yarnpkg.com/extend/-/extend-3.0.2.tgz#f8b1136b4071fbd8eb140aff858b1019ec2915fa"
+  integrity sha512-fjquC59cD7CyW6urNXK0FBufkZcoiGG80wTuPujX590cB5Ttln20E2UB4S/WARVqhXffZl2LNgS+gQdPIIim/g==
 
 extract-zip@^2.0.1:
   version "2.0.1"
