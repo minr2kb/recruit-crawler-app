@@ -8,6 +8,7 @@ import InformationModal from './InformationModal'
 function HeaderSection() {
   const [openInfo, setOpenInfo] = useState(false)
   const isScrolled = useIsScrolled()
+  const version = 'v1.1.1'
   return (
     <Box
       sx={{
@@ -51,7 +52,7 @@ function HeaderSection() {
               ml: 0.5
             }}
           >
-            v1.1.0
+            {version}
           </Typography>
         </Box>
         <Box display="flex">

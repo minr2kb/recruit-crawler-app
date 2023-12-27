@@ -14,4 +14,4 @@ export interface CategoryFilterType {
   children?: CategoryFilterType[]
 }
 
-export type TotalResultType = Record<string, ResultType[]>
+export type TotalResultType = Record<string, ResultType[] | null>

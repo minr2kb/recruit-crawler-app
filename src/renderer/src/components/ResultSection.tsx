@@ -1,7 +1,7 @@
 /* eslint-disable no-alert */
 /* eslint-disable @typescript-eslint/no-misused-promises */
 /* eslint-disable no-console */
-import { Check, Download, Error } from '@mui/icons-material'
+import { Block, Check, Download, Error } from '@mui/icons-material'
 import {
   Box,
   Button,
@@ -66,23 +66,50 @@ function ResultSection() {
     }
   }
 
-  const getPosts = async (platform: Platforms) => {
+  const getPostsAsync = async (platform: Platforms) => {
     const promises =
       selectedCategories[platform]?.map(async (cate) => {
-        const data = await getFunc(platform)(cate.label, String(cate.value), limitMonths)
-        setCrawlResults((prev) => ({ ...prev, [`${platform}_${cate.label}`]: data }))
-        return data
+        try {
+          const data = await getFunc(platform)(cate.label, String(cate.value), limitMonths)
+          setCrawlResults((prev) => ({ ...prev, [`${platform}_${cate.label}`]: data }))
+          return data
+        } catch (err) {
+          setCrawlResults((prev) => ({ ...prev, [`${platform}_${cate.label}`]: null }))
+          return null
+        }
       }) ?? []
 
-    const timeoutId = setTimeout(() => {
-      window.alert(
-        '15초가 경과했습니다. 만약 개월 수 대비 비정상적으로 오래 걸린다면 새로고침을 해주세요.'
-      )
-    }, 15 * 1000)
-
     const results = await Promise.all(promises)
-    clearTimeout(timeoutId) // 작업이 완료되면 타이머를 제거합니다.
-    const fullData = ([] as ResultType[]).concat(...results)
+    const noneNullResults = results.filter((r) => r !== null) as unknown as ResultType[]
+    const fullData = ([] as ResultType[]).concat(...noneNullResults)
+    setCrawlResults((prev) => ({ ...prev, [`${platform}_ALL`]: fullData }))
+    return fullData
+  }
+
+  const getPosts = async (platform: Platforms) => {
+    const fullData = [] as ResultType[]
+
+    const selectedCategory = selectedCategories[platform]
+
+    if (selectedCategory && selectedCategory.length <= 3) {
+      // eslint-disable-next-line no-return-await
+      return await getPostsAsync(platform)
+    }
+
+    if (selectedCategory) {
+      for (const cate of selectedCategory) {
+        try {
+          const data = await getFunc(platform)(cate.label, String(cate.value), limitMonths)
+          setCrawlResults((prev) => ({ ...prev, [`${platform}_${cate.label}`]: data }))
+          if (data !== null) {
+            fullData.push(...data)
+          }
+        } catch (err) {
+          setCrawlResults((prev) => ({ ...prev, [`${platform}_${cate.label}`]: null }))
+        }
+      }
+    }
+
     setCrawlResults((prev) => ({ ...prev, [`${platform}_ALL`]: fullData }))
     return fullData
   }
@@ -93,6 +120,7 @@ function ResultSection() {
       console.log('\n\n####### 🚗 Initializing 🚗 #######\n\n')
       setIsCrawling(true)
       setCrawlResults({})
+
       const promises = selectedPlatforms.map(
         // eslint-disable-next-line no-return-await
         async (selectedPlatform) => await getPosts(selectedPlatform)
@@ -114,12 +142,14 @@ function ResultSection() {
 
   const getStateIcon = useCallback(
     (key: string) => {
-      if (!crawlResults?.[key])
+      const res = crawlResults?.[key]
+      if (res === undefined)
         return isCrawling ? <CircularProgress size={20} sx={{ p: 0.5 }} /> : undefined
-      return crawlResults[key].length > 0 ? (
+      if (res === null) return <Error fontSize="small" color="error" />
+      return res.length > 0 ? (
         <Check fontSize="small" color="primary" />
       ) : (
-        <Error fontSize="small" color="error" />
+        <Block fontSize="small" color="disabled" />
       )
     },
     [crawlResults, isCrawling]
@@ -189,7 +219,8 @@ function ResultSection() {
                 )}
                 {selectedCategories[platform]?.map((cate) => {
                   const key = `${platform}_${cate.label}`
-                  return crawlResults?.[key] && crawlResults?.[key].length > 0 ? (
+                  const res = crawlResults?.[key]
+                  return res && res.length > 0 ? (
                     <CSVLink
                       key={`${platform}-${cate.value}-label`}
                       filename={key}
@@ -202,7 +233,7 @@ function ResultSection() {
                     >
                       <Chip
                         sx={{ my: 0.5, mr: 0.5 }}
-                        label={`${cate.label} (${crawlResults[key].length})`}
+                        label={`${cate.label} (${res.length})`}
                         variant="outlined"
                         icon={getStateIcon(key)}
                       />

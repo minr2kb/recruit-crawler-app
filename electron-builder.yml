@@ -2,7 +2,7 @@ appId: com.electron.app
 productName: recruit-crawler-app
 directories:
   buildResources: build
-  output: dist/${os}
+  output: dist/${os}-${arch}-${version}
 files:
   - '!**/.vscode/*'
   - '!src/*'
