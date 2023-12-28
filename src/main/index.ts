@@ -42,9 +42,11 @@ function createWindow(): void {
   }
 }
 
-ipcMain.on('app_version', (event) => {
-  event.reply('app_version', { version: app.getVersion() })
-})
+// ipcMain.on('app_version', (event) => {
+//   event.reply('app_version', { version: app.getVersion() })
+// })
+
+ipcMain.handle('app-version', () => app.getVersion())
 
 /* Updater ====================================================== */
 

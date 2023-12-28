@@ -1,14 +1,22 @@
 import { InfoOutlined, RefreshOutlined } from '@mui/icons-material'
 import { Box, IconButton, Tooltip, Typography } from '@mui/material'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import useIsScrolled from '../hooks/useIsScrolled'
 import FontWeightValues from '../utils/fontTypes'
 import InformationModal from './InformationModal'
 
 function HeaderSection() {
   const [openInfo, setOpenInfo] = useState(false)
+  const [appVersion, setAppVersion] = useState('')
   const isScrolled = useIsScrolled()
-  const version = 'v1.2.2'
+
+  useEffect(() => {
+    // eslint-disable-next-line @typescript-eslint/no-floating-promises
+    window.api.getAppVersion().then((version) => {
+      setAppVersion(version)
+    })
+  }, [])
+
   return (
     <Box
       sx={{
@@ -52,7 +60,7 @@ function HeaderSection() {
               ml: 0.5
             }}
           >
-            {version}
+            v{appVersion}
           </Typography>
         </Box>
         <Box display="flex">

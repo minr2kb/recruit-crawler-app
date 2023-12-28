@@ -1,4 +1,15 @@
-import { Dialog, DialogContent, DialogContentText, DialogTitle, Divider } from '@mui/material'
+import { Check, Close, DataArray, Error } from '@mui/icons-material'
+import {
+  Chip,
+  CircularProgress,
+  Dialog,
+  DialogContent,
+  DialogContentText,
+  DialogTitle,
+  Divider,
+  Grid,
+  IconButton
+} from '@mui/material'
 import FontWeightValues from '../utils/fontTypes'
 
 export interface Props {
@@ -10,8 +21,13 @@ function InformationModal(props: Props) {
   const { onClose, open } = props
 
   return (
-    <Dialog onClose={onClose} open={open} fullWidth maxWidth="xs">
-      <DialogTitle>도움말</DialogTitle>
+    <Dialog onClose={onClose} open={open} fullWidth maxWidth="sm">
+      <DialogTitle sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+        도움말
+        <IconButton onClick={onClose}>
+          <Close />
+        </IconButton>
+      </DialogTitle>
 
       <DialogContent>
         <DialogContentText fontWeight={FontWeightValues.BOLD} lineHeight={2}>
@@ -39,6 +55,48 @@ function InformationModal(props: Props) {
           7. 각 직무 chip을 클릭시 직무별 csv를, 아래 다운 버튼 클릭시 플랫폼 단위로 다운로드
           가능합니다.
         </DialogContentText>
+        <DialogContentText lineHeight={2}>
+          8. 크롤링 도중, <b>STOP</b>을 클릭하여 크롤링을 중지할 수 있습니다.
+        </DialogContentText>
+
+        <DialogContentText fontWeight={FontWeightValues.BOLD} lineHeight={2} mt={3}>
+          인디케이터
+        </DialogContentText>
+        <Grid container spacing={1}>
+          <Grid item>
+            <Chip label="크롤링 시작 전" variant="outlined" />
+          </Grid>
+          <Grid item>
+            <Chip
+              label="결과가 있을 경우 (29)"
+              variant="outlined"
+              icon={<Check fontSize="small" color="primary" />}
+            />
+          </Grid>
+          <Grid item>
+            <Chip
+              label="크롤링 도중인 경우"
+              variant="outlined"
+              icon={<CircularProgress size={20} sx={{ p: 0.5 }} />}
+            />
+          </Grid>
+          <Grid item>
+            <Chip
+              label="문제가 발생했을 경우 / 중단시"
+              variant="outlined"
+              icon={<Error fontSize="small" color="error" />}
+            />
+          </Grid>
+
+          <Grid item>
+            <Chip
+              label="결과가 없을 경우"
+              variant="outlined"
+              icon={<DataArray fontSize="small" color="disabled" />}
+            />
+          </Grid>
+        </Grid>
+
         <DialogContentText fontWeight={FontWeightValues.BOLD} lineHeight={2} mt={3}>
           예외 케이스
         </DialogContentText>
@@ -47,6 +105,10 @@ function InformationModal(props: Props) {
         </DialogContentText>
         <DialogContentText lineHeight={2}>
           - <b>원티드</b>의 경우, 공고 날짜가 지원되지 않아 전체 공고 크롤링을 진행합니다.
+        </DialogContentText>
+        <DialogContentText lineHeight={2}>
+          - 모든 요청은 기존적으로 병렬로 이루어지되, 서버 과부하 방지를 위해 3개 초과 카테고리는{' '}
+          <b>동기 요청</b>이 이루어집니다. 따라서 크롤링 속도가 느릴 수 있습니다.
         </DialogContentText>
         <Divider sx={{ my: 2 }} />
         <DialogContentText variant="body2" lineHeight={2} textAlign="center">

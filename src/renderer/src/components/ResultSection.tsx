@@ -1,7 +1,8 @@
+/* eslint-disable no-nested-ternary */
 /* eslint-disable no-alert */
 /* eslint-disable @typescript-eslint/no-misused-promises */
 /* eslint-disable no-console */
-import { Block, Check, Download, Error } from '@mui/icons-material'
+import { Check, DataArray, Download, Error } from '@mui/icons-material'
 import {
   Box,
   Button,
@@ -156,7 +157,10 @@ function ResultSection() {
   const onClickStop = () => {
     controllerRef.current?.abort()
     setIsCrawling(false)
-    setCrawlResults({})
+  }
+
+  const onClickReset = () => {
+    setCrawlResults(undefined)
   }
 
   const getStateIcon = useCallback(
@@ -168,7 +172,7 @@ function ResultSection() {
       return res.length > 0 ? (
         <Check fontSize="small" color="primary" />
       ) : (
-        <Block fontSize="small" color="disabled" />
+        <DataArray fontSize="small" color="disabled" />
       )
     },
     [crawlResults, isCrawling]
@@ -185,7 +189,12 @@ function ResultSection() {
               data={crawlResults?.[RECRUITS_ALL_KEY] ?? []}
               headers={selectedFields}
             >
-              <Button fullWidth size="small" disabled={!crawlResults?.[RECRUITS_ALL_KEY]}>
+              <Button
+                fullWidth
+                size="small"
+                disabled={!crawlResults?.[RECRUITS_ALL_KEY]}
+                sx={{ mr: 1 }}
+              >
                 {RECRUITS_ALL_KEY}.csv
                 <Download fontSize="small" />
               </Button>
@@ -201,10 +210,18 @@ function ResultSection() {
             </Tooltip>
           )}
           {isCrawling ? (
-            <Tooltip title="크롤링 시작">
+            <Tooltip title="크롤링 중단">
               <Box>
-                <Button variant="contained" color="error" onClick={onClickStop} sx={{ ml: 1 }}>
+                <Button variant="contained" color="error" onClick={onClickStop}>
                   STOP
+                </Button>
+              </Box>
+            </Tooltip>
+          ) : crawlResults ? (
+            <Tooltip title="결과 리셋">
+              <Box>
+                <Button variant="outlined" onClick={onClickReset} disabled={isCrawling}>
+                  RESET
                 </Button>
               </Box>
             </Tooltip>
@@ -215,7 +232,6 @@ function ResultSection() {
                   variant="contained"
                   onClick={onClickStart}
                   disabled={isCrawling || selectedPlatforms.length < 1}
-                  sx={{ ml: 1 }}
                 >
                   START
                 </Button>
@@ -232,81 +248,89 @@ function ResultSection() {
             </Typography>
           </Box>
         )}
-        {selectedPlatforms.map((platform) => (
-          <Grid item xs={12} sm={6} key={`selected-platform-${platform}`}>
-            <Card
-              variant="outlined"
-              sx={{ height: '100%', display: 'flex', flexDirection: 'column' }}
-            >
-              <CardContent
-                sx={{
-                  display: 'flex',
-                  flexDirection: 'column',
-                  alignItems: 'flex-start',
-                  flex: 1
-                }}
+        {selectedPlatforms.map((platform) => {
+          const platformKey = `${platform}_ALL`
+          const platformRes = crawlResults?.[platformKey]
+
+          return (
+            <Grid item xs={12} sm={6} key={`selected-platform-${platform}`}>
+              <Card
+                variant="outlined"
+                sx={{ height: '100%', display: 'flex', flexDirection: 'column' }}
               >
-                <Typography gutterBottom variant="subtitle1" component="div">
-                  {platform}
-                </Typography>
-                {(!selectedCategories[platform] || selectedCategories[platform]?.length === 0) && (
-                  <Typography variant="body2" color="text.secondary">
-                    선택된 직무가 없습니다.
+                <CardContent
+                  sx={{
+                    display: 'flex',
+                    flexDirection: 'column',
+                    alignItems: 'flex-start',
+                    flex: 1
+                  }}
+                >
+                  <Typography gutterBottom variant="subtitle1" component="div">
+                    {platform}
                   </Typography>
-                )}
-                {selectedCategories[platform]?.map((cate) => {
-                  const key = `${platform}_${cate.label}`
-                  const res = crawlResults?.[key]
-                  return res && res.length > 0 ? (
-                    <CSVLink
-                      key={`${platform}-${cate.value}-label`}
-                      filename={key}
-                      data={crawlResults?.[key] ?? []}
-                      headers={selectedFields}
-                      style={{
-                        width: '100%',
-                        textDecoration: 'none'
-                      }}
-                    >
+                  {(!selectedCategories[platform] ||
+                    selectedCategories[platform]?.length === 0) && (
+                    <Typography variant="body2" color="text.secondary">
+                      선택된 직무가 없습니다.
+                    </Typography>
+                  )}
+                  {selectedCategories[platform]?.map((cate) => {
+                    const catekey = `${platform}_${cate.label}`
+                    const cateRes = crawlResults?.[catekey]
+                    return cateRes && cateRes.length > 0 ? (
+                      <CSVLink
+                        key={`${platform}-${cate.value}-label`}
+                        filename={catekey}
+                        data={cateRes ?? []}
+                        headers={selectedFields}
+                        style={{
+                          width: '100%',
+                          textDecoration: 'none'
+                        }}
+                      >
+                        <Chip
+                          sx={{ my: 0.5, mr: 0.5 }}
+                          label={`${cate.label} (${cateRes.length})`}
+                          variant="outlined"
+                          icon={getStateIcon(catekey)}
+                        />
+                      </CSVLink>
+                    ) : (
                       <Chip
+                        key={`${platform}-${cate.value}-label`}
                         sx={{ my: 0.5, mr: 0.5 }}
-                        label={`${cate.label} (${res.length})`}
+                        label={cate.label}
                         variant="outlined"
-                        icon={getStateIcon(key)}
+                        icon={getStateIcon(catekey)}
                       />
+                    )
+                  })}
+                </CardContent>
+                <CardActions>
+                  {platformRes && platformRes?.length > 0 ? (
+                    <CSVLink
+                      filename={`${platformKey}.csv`}
+                      data={platformRes ?? []}
+                      headers={selectedFields}
+                      style={{ width: '100%' }}
+                    >
+                      <Button fullWidth variant="contained" size="small">
+                        {platformKey}.csv
+                        <Download fontSize="small" />
+                      </Button>
                     </CSVLink>
                   ) : (
-                    <Chip
-                      key={`${platform}-${cate.value}-label`}
-                      sx={{ my: 0.5, mr: 0.5 }}
-                      label={cate.label}
-                      variant="outlined"
-                      icon={getStateIcon(key)}
-                    />
-                  )
-                })}
-              </CardContent>
-              <CardActions>
-                <CSVLink
-                  filename={`${platform}_ALL.csv`}
-                  data={crawlResults?.[`${platform}_ALL`] ?? []}
-                  headers={selectedFields}
-                  style={{ width: '100%' }}
-                >
-                  <Button
-                    fullWidth
-                    variant="contained"
-                    size="small"
-                    disabled={!crawlResults?.[`${platform}_ALL`]}
-                  >
-                    {platform}_ALL.csv
-                    <Download fontSize="small" />
-                  </Button>
-                </CSVLink>
-              </CardActions>
-            </Card>
-          </Grid>
-        ))}
+                    <Button fullWidth variant="contained" size="small" disabled={!platformRes}>
+                      {platform}_ALL.csv
+                      <Download fontSize="small" />
+                    </Button>
+                  )}
+                </CardActions>
+              </Card>
+            </Grid>
+          )
+        })}
       </Grid>
     </Paper>
   )
