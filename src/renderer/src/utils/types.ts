@@ -8,6 +8,11 @@ export interface ResultType {
   companyLocation: string
 }
 
+export interface ResultByPageType {
+  result: ResultType[]
+  next: boolean
+}
+
 export interface CategoryFilterType {
   label: string
   value?: number | string

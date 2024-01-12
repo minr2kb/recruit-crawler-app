@@ -58,6 +58,7 @@ const getPostsFromJobplanet =
       })
       try {
         const results = await Promise.all(promises)
+
         results.forEach((data) => {
           if (data) result.push(data)
         })
@@ -66,6 +67,7 @@ const getPostsFromJobplanet =
         console.error(e)
       }
     }
+    console.log(`Jobplanet - ${position} - ✅ DONE`)
     return result.sort(
       (a, b) => new Date(b.updatedDate).valueOf() - new Date(a.updatedDate).valueOf()
     )

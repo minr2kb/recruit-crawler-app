@@ -11,13 +11,9 @@ import ResultSection from './components/ResultSection'
 
 function App() {
   useEffect(() => {
-    void healthCheck()
-      .then((res) => {
-        console.log(res)
-      })
-      .catch(() => {
-        window.alert('서버가 꺼져있습니다.')
-      })
+    void healthCheck().catch(() => {
+      window.alert('서버가 꺼져있습니다.')
+    })
   }, [])
 
   return (

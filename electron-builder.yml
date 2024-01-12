@@ -2,7 +2,7 @@ appId: com.electron.app
 productName: recruit-crawler-app
 directories:
   buildResources: build
-  output: dist/${os}-${arch}-${version}
+  output: dist/RC-${version}-${os}-${arch}
 files:
   - '!**/.vscode/*'
   - '!src/*'
@@ -44,5 +44,5 @@ appImage:
   artifactName: ${name}-${version}.${ext}
 npmRebuild: false
 publish:
-  provider: generic
-  url: https://example.com/auto-updates
+  provider: github
+  token: ${env.GH_TOKEN}

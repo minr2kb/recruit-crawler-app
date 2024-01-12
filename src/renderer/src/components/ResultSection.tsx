@@ -11,26 +11,27 @@ import {
   CardContent,
   Chip,
   CircularProgress,
+  Collapse,
   Grid,
   Paper,
   Tooltip,
   Typography
 } from '@mui/material'
 
-import { useAtomValue } from 'jotai'
-import { useCallback, useRef, useState } from 'react'
+import { useAtom, useAtomValue } from 'jotai'
+import { useCallback, useEffect, useRef, useState } from 'react'
+
 import { CSVLink } from 'react-csv'
 
-import {
-  getPostsFromJumpit,
-  getPostsFromProgrammers,
-  getPostsFromRemember,
-  getPostsFromWanted
-} from '../api/crawlers'
 import { Platforms } from '../utils/const'
 import getPostsFromJobplanet from '../utils/crawlers/jobplanet'
+import getPostsFromJumpit from '../utils/crawlers/jumpit'
+import getPostsFromProgrammers from '../utils/crawlers/programmers'
+import getPostsFromRemember from '../utils/crawlers/remember'
+import getPostsFromWanted from '../utils/crawlers/wanted'
 import {
   limitMonthsState,
+  progressLogState,
   selectedCategoriesState,
   selectedFieldsState,
   selectedPlatformsState
@@ -39,13 +40,17 @@ import { type ResultType, type TotalResultType } from '../utils/types'
 
 const RECRUITS_ALL_KEY = 'RECRUITS_ALL'
 
+const MAX_ASYNC_COUNT = 5
+
 function ResultSection() {
   const selectedPlatforms = useAtomValue(selectedPlatformsState)
   const selectedCategories = useAtomValue(selectedCategoriesState)
   const selectedFields = useAtomValue(selectedFieldsState)
   const limitMonths = useAtomValue(limitMonthsState)
+  const [progressLog, setProgressLog] = useAtom(progressLogState)
 
   const controllerRef = useRef<AbortController>()
+  const consoleScrollRef = useRef<HTMLDivElement>(null)
 
   const [crawlResults, setCrawlResults] = useState<TotalResultType>()
   const [isCrawling, setIsCrawling] = useState<boolean>(false)
@@ -55,16 +60,16 @@ function ResultSection() {
     controller: AbortController
   ): ((position: string, cateKey: string, month?: number) => Promise<ResultType[]>) => {
     switch (platform) {
+      case Platforms.JOBPLANET:
+        return getPostsFromJobplanet(controller)
       case Platforms.JUMPIT:
         return getPostsFromJumpit(controller)
       case Platforms.PROGRAMMERS:
         return getPostsFromProgrammers(controller)
-      case Platforms.JOBPLANET:
-        return getPostsFromJobplanet(controller)
-      case Platforms.WANTED:
-        return getPostsFromWanted(controller)
       case Platforms.REMEMBER:
         return getPostsFromRemember(controller)
+      case Platforms.WANTED:
+        return getPostsFromWanted(controller)
       default:
         return async () => []
     }
@@ -96,10 +101,8 @@ function ResultSection() {
 
   const getPosts = async (platform: Platforms, controller: AbortController) => {
     const fullData = [] as ResultType[]
-
     const selectedCategory = selectedCategories[platform]
-
-    if (selectedCategory && selectedCategory.length <= 3) {
+    if (selectedCategory && selectedCategory.length <= MAX_ASYNC_COUNT) {
       // eslint-disable-next-line no-return-await
       return await getPostsAsync(platform, controller)
     }
@@ -128,10 +131,12 @@ function ResultSection() {
 
   const onClickStart = async () => {
     try {
-      console.time('⏱️ Total time spent')
-      console.log('\n\n####### 🚗 Initializing 🚗 #######\n\n')
+      const startTime = new Date()
+      setProgressLog('')
       setIsCrawling(true)
       setCrawlResults({})
+      console.log('####### 🚗 Initializing 🚗 #######\n')
+
       const abortController = new AbortController()
       controllerRef.current = abortController
 
@@ -146,8 +151,8 @@ function ResultSection() {
       setCrawlResults((prev) => ({ ...prev, [RECRUITS_ALL_KEY]: fullData }))
       setIsCrawling(false)
 
-      console.log('\n\n####### ✨ Done ✨ #######\n\n')
-      console.timeLog('⏱️ Total time spent')
+      console.log('\n####### ✨ Done ✨ #######')
+      console.log('⏱️ Total time spent: ', (new Date().getTime() - startTime.getTime()) / 1000, 's')
     } catch (err) {
       setIsCrawling(false)
       window.alert('🛑 ERROR OCCURED')
@@ -161,6 +166,7 @@ function ResultSection() {
 
   const onClickReset = () => {
     setCrawlResults(undefined)
+    setProgressLog('')
   }
 
   const getStateIcon = useCallback(
@@ -178,6 +184,26 @@ function ResultSection() {
     [crawlResults, isCrawling]
   )
 
+  const scrollToBottom = () => {
+    if (consoleScrollRef.current) {
+      consoleScrollRef.current.scrollTop = consoleScrollRef.current.scrollHeight
+    }
+  }
+
+  useEffect(() => {
+    // eslint-disable-next-line no-global-assign
+    console = {
+      ...console,
+      log: (...args) => {
+        setProgressLog((prev) => `${prev}\n${args.join(' ')}`)
+      }
+    }
+  }, [])
+
+  useEffect(() => {
+    scrollToBottom()
+  }, [progressLog])
+
   return (
     <Paper variant="outlined" sx={{ p: 3, border: 'none' }}>
       <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', mb: 2 }}>
@@ -193,7 +219,7 @@ function ResultSection() {
                 fullWidth
                 size="small"
                 disabled={!crawlResults?.[RECRUITS_ALL_KEY]}
-                sx={{ mr: 1 }}
+                sx={{ mr: 2 }}
               >
                 {RECRUITS_ALL_KEY}.csv
                 <Download fontSize="small" />
@@ -239,6 +265,23 @@ function ResultSection() {
             </Tooltip>
           )}
         </Box>
+      </Box>
+      <Box mb={2}>
+        <Collapse in={!!progressLog?.length}>
+          <Box
+            ref={consoleScrollRef}
+            sx={{
+              px: 2,
+              pb: 3,
+              borderRadius: '5px',
+              backgroundColor: '#333',
+              maxHeight: '300px',
+              overflow: 'auto'
+            }}
+          >
+            <pre style={{ color: '#fff', fontSize: 14 }}>{progressLog}</pre>
+          </Box>
+        </Collapse>
       </Box>
       <Grid container spacing={2}>
         {selectedPlatforms?.length === 0 && (
