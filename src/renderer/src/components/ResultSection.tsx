@@ -2,8 +2,10 @@
 /* eslint-disable no-alert */
 /* eslint-disable @typescript-eslint/no-misused-promises */
 /* eslint-disable no-console */
-import { Check, DataArray, Download, Error } from '@mui/icons-material'
-
+import Check from '@mui/icons-material/Check'
+import DataArray from '@mui/icons-material/DataArray'
+import Error from '@mui/icons-material/Error'
+import Download from '@mui/icons-material/Download'
 import Chip from '@mui/material/Chip'
 import Grid from '@mui/material/Grid'
 import CircularProgress from '@mui/material/CircularProgress'

@@ -1,4 +1,7 @@
-import { Check, Close, DataArray, Error } from '@mui/icons-material'
+import Check from '@mui/icons-material/Check'
+import Close from '@mui/icons-material/Close'
+import DataArray from '@mui/icons-material/DataArray'
+import Error from '@mui/icons-material/Error'
 import Chip from '@mui/material/Chip'
 import Dialog from '@mui/material/Dialog'
 import DialogContent from '@mui/material/DialogContent'

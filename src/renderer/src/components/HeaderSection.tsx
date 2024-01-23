@@ -1,4 +1,5 @@
-import { InfoOutlined, RefreshOutlined } from '@mui/icons-material'
+import InfoOutlined from '@mui/icons-material/InfoOutlined'
+import RefreshOutlined from '@mui/icons-material/RefreshOutlined'
 import Box from '@mui/material/Box'
 import IconButton from '@mui/material/IconButton'
 import Tooltip from '@mui/material/Tooltip'
