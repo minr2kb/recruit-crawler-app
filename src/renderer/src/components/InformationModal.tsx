@@ -1,15 +1,13 @@
 import { Check, Close, DataArray, Error } from '@mui/icons-material'
-import {
-  Chip,
-  CircularProgress,
-  Dialog,
-  DialogContent,
-  DialogContentText,
-  DialogTitle,
-  Divider,
-  Grid,
-  IconButton
-} from '@mui/material'
+import Chip from '@mui/material/Chip'
+import Dialog from '@mui/material/Dialog'
+import DialogContent from '@mui/material/DialogContent'
+import DialogContentText from '@mui/material/DialogContentText'
+import DialogTitle from '@mui/material/DialogTitle'
+import Divider from '@mui/material/Divider'
+import Grid from '@mui/material/Grid'
+import IconButton from '@mui/material/IconButton'
+import CircularProgress from '@mui/material/CircularProgress'
 import FontWeightValues from '../utils/fontTypes'
 
 export interface Props {

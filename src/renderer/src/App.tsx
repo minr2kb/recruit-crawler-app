@@ -1,6 +1,7 @@
 /* eslint-disable @typescript-eslint/no-misused-promises */
 /* eslint-disable no-console */
-import { Box, Grid } from '@mui/material'
+import Box from '@mui/material/Box'
+import Grid from '@mui/material/Grid'
 
 import { useEffect } from 'react'
 import { healthCheck } from './api/healthCheck'

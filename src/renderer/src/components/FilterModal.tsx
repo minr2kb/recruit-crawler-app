@@ -1,20 +1,19 @@
 import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos'
-import {
-  Button,
-  Checkbox,
-  Chip,
-  Dialog,
-  DialogActions,
-  DialogContent,
-  DialogTitle,
-  Divider,
-  Grid,
-  List,
-  ListItem,
-  ListItemButton,
-  ListItemText,
-  Typography
-} from '@mui/material'
+import Button from '@mui/material/Button'
+import Checkbox from '@mui/material/Checkbox'
+import Chip from '@mui/material/Chip'
+import Dialog from '@mui/material/Dialog'
+import DialogActions from '@mui/material/DialogActions'
+import DialogContent from '@mui/material/DialogContent'
+import DialogTitle from '@mui/material/DialogTitle'
+import Divider from '@mui/material/Divider'
+
+import Grid from '@mui/material/Grid'
+import List from '@mui/material/List'
+import ListItem from '@mui/material/ListItem'
+import ListItemButton from '@mui/material/ListItemButton'
+import ListItemText from '@mui/material/ListItemText'
+import Typography from '@mui/material/Typography'
 import { useEffect, useState } from 'react'
 import { type CategoryFilterType } from '../utils/types'
 

@@ -1,5 +1,5 @@
 import { ThemeProvider } from '@emotion/react'
-import { CssBaseline } from '@mui/material'
+import CssBaseline from '@mui/material/CssBaseline'
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import { Provider } from 'jotai'
 import React from 'react'

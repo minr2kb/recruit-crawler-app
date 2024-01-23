@@ -1,5 +1,11 @@
 /* eslint-disable @typescript-eslint/restrict-template-expressions */
-import { Box, Checkbox, FormControlLabel, Paper, TextField, Typography } from '@mui/material'
+import Box from '@mui/material/Box'
+import Checkbox from '@mui/material/Checkbox'
+import FormControlLabel from '@mui/material/FormControlLabel'
+import Paper from '@mui/material/Paper'
+import TextField from '@mui/material/TextField'
+import Typography from '@mui/material/Typography'
+
 import { useAtom } from 'jotai'
 import { headerFields } from '../utils/const'
 import { limitMonthsState, selectedFieldsState } from '../utils/store'

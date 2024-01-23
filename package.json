@@ -1,6 +1,6 @@
 {
   "name": "recruit-crawler-app",
-  "version": "1.3.0",
+  "version": "1.3.1",
   "description": "An Electron application for recruit-crawler-v2",
   "main": "./out/main/index.js",
   "author": "Kyungbae Min",
@@ -8,6 +8,15 @@
   "repository": {
     "type": "git",
     "url": "https://github.com/minr2kb/recruit-crawler-app.git"
+  },
+  "build": {
+    "files": [
+      "out/**/*",
+      "dist/**/*",
+      "node_modules/**/*",
+      "package.json"
+    ],
+    "asar": true
   },
   "scripts": {
     "format": "prettier --write .",

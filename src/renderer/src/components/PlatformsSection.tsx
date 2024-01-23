@@ -1,4 +1,5 @@
-import { Paper, Typography } from '@mui/material'
+import Paper from '@mui/material/Paper';
+import Typography from '@mui/material/Typography';
 import useJobPlanetCategories from '../hooks/useJobPlanetCategories'
 import useJumpitCategories from '../hooks/useJumpitCategories'
 import useProgrammersCategories from '../hooks/useProgrammersCategories'
