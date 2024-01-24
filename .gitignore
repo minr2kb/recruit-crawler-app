@@ -2,6 +2,6 @@ node_modules
 dist
 out
 *.log*
-src/renderer/src/api/consts.ts
+src/renderer/src/api/const.ts
 src/main/const.ts
 electron-builder.env
