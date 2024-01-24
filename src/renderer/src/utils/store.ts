@@ -1,7 +1,9 @@
 import { atom } from 'jotai'
 import { atomWithStorage } from 'jotai/utils'
-import { headerFields, type Platforms } from './const'
+import { ServerStatus, headerFields, type Platforms } from './const'
 import { type CategoryFilterType } from './types'
+
+export const serverStatusState = atom<ServerStatus>(ServerStatus.STARTING)
 
 export const selectedCategoriesState = atomWithStorage<
   Partial<Record<Platforms, CategoryFilterType[]>>

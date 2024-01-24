@@ -15,3 +15,9 @@ export enum Platforms {
   WANTED = '원티드',
   REMEMBER = '리멤버'
 }
+
+export enum ServerStatus {
+  ONLINE = 'ONLINE',
+  OFFLINE = 'OFFLINE',
+  STARTING = 'STARTING',
+ }

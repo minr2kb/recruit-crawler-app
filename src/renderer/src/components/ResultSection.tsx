@@ -24,13 +24,14 @@ import { useCallback, useEffect, useRef, useState } from 'react'
 
 import { CSVLink } from 'react-csv'
 
-import { Platforms } from '../utils/const'
+import { Platforms, ServerStatus } from '../utils/const'
 import getPostsFromJobplanet from '../utils/crawlers/jobplanet'
 import getPostsFromJumpit from '../utils/crawlers/jumpit'
 import getPostsFromProgrammers from '../utils/crawlers/programmers'
 import getPostsFromRemember from '../utils/crawlers/remember'
 import getPostsFromWanted from '../utils/crawlers/wanted'
 import {
+  serverStatusState,
   limitMonthsState,
   progressLogState,
   selectedCategoriesState,
@@ -48,6 +49,7 @@ function ResultSection() {
   const selectedCategories = useAtomValue(selectedCategoriesState)
   const selectedFields = useAtomValue(selectedFieldsState)
   const limitMonths = useAtomValue(limitMonthsState)
+  const serverStatus = useAtomValue(serverStatusState)
   const [progressLog, setProgressLog] = useAtom(progressLogState)
 
   const controllerRef = useRef<AbortController>()
@@ -258,7 +260,7 @@ function ResultSection() {
                 <Button
                   variant="contained"
                   onClick={onClickStart}
-                  disabled={isCrawling || selectedPlatforms.length < 1}
+                  disabled={isCrawling || selectedPlatforms.length < 1 || serverStatus !== ServerStatus.ONLINE}
                 >
                   START
                 </Button>

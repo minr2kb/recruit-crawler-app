@@ -4,7 +4,8 @@ import { contextBridge, ipcRenderer } from 'electron'
 // Custom APIs for renderer
 const api = {
   // eslint-disable-next-line no-return-await
-  getAppVersion: async () => await ipcRenderer.invoke('app-version')
+  getAppVersion: async () => await ipcRenderer.invoke('app-version'),
+  startServer: async () => await ipcRenderer.invoke('start-server')
 }
 
 // Use `contextBridge` APIs to expose Electron APIs to

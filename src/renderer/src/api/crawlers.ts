@@ -1,6 +1,6 @@
 import axios from 'axios'
 import { type ResultByPageType, type ResultType } from '../utils/types'
-import { BACKEND_URL, CRAWLER_PREFIX } from './consts'
+import { BACKEND_URL, CRAWLER_PREFIX } from './const'
 
 /**
  * @deprecated CloudFlare에서 봇으로 인식하고 차단함

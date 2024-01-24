@@ -6,6 +6,8 @@ import log from 'electron-log'
 import ProgressBar from 'electron-progressbar'
 import { autoUpdater } from 'electron-updater'
 import icon from '../../resources/icon.png?asset'
+import axios from 'axios'
+import { BACKEND_API_URL, CTYPE_API_KEY } from './const'
 
 let progressBar: ProgressBar
 
@@ -42,11 +44,21 @@ function createWindow(): void {
   }
 }
 
-// ipcMain.on('app_version', (event) => {
-//   event.reply('app_version', { version: app.getVersion() })
-// })
+/* APIs ====================================================== */
 
 ipcMain.handle('app-version', () => app.getVersion())
+ipcMain.handle('start-server', async () => {
+  const res = await axios.put(`${BACKEND_API_URL}/start`,
+    undefined,
+    {
+      headers:{
+        'Authorization': `Bearer ${CTYPE_API_KEY}`,
+        Host: 'api.cloudtype.io',
+        'User-Agent': 'PostmanRuntime/7.26.8',
+      },
+  })
+  return res.status === 200
+})
 
 /* Updater ====================================================== */
 
@@ -119,7 +131,7 @@ autoUpdater.on('update-downloaded', () => {
 // Some APIs can only be used after this event occurs.
 app.whenReady().then(() => {
   // Set app user model id for windows
-  electronApp.setAppUserModelId('com.electron')
+  electronApp.setAppUserModelId('com.recruit.crawler.app')
 
   // Default open or close DevTools by F12 in development
   // and ignore CommandOrControl + R in production.

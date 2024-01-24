@@ -3,4 +3,5 @@ dist
 out
 *.log*
 src/renderer/src/api/consts.ts
+src/main/const.ts
 electron-builder.env

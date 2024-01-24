@@ -3,6 +3,9 @@ import { useQuery, type UseQueryOptions } from '@tanstack/react-query'
 import axios, { HttpStatusCode } from 'axios'
 import queryKeys from '../utils/query-keys'
 import { type CategoryFilterType } from '../utils/types'
+import { useAtomValue } from 'jotai'
+import { serverStatusState } from '../utils/store'
+import { ServerStatus } from '../utils/const'
 
 export interface JobplanetCateDataType {
   label: string
@@ -26,6 +29,7 @@ const useJobPlanetCategories = ({
 }: {
   options?: Omit<UseQueryOptions<CategoryFilterType[]>, 'queryFn' | 'queryKey'>
 } = {}) => {
+  const serverStatus = useAtomValue(serverStatusState)
   return useQuery<CategoryFilterType[]>(
     queryKeys.CATEGORIES('jobplanet'),
     async () => {
@@ -46,6 +50,7 @@ const useJobPlanetCategories = ({
     },
     {
       keepPreviousData: true,
+      enabled: serverStatus === ServerStatus.ONLINE,
       ...options
     }
   )

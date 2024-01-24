@@ -4,15 +4,33 @@ import Box from '@mui/material/Box'
 import IconButton from '@mui/material/IconButton'
 import Tooltip from '@mui/material/Tooltip'
 import Typography from '@mui/material/Typography'
-import { useEffect, useState } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 import useIsScrolled from '../hooks/useIsScrolled'
 import FontWeightValues from '../utils/fontTypes'
 import InformationModal from './InformationModal'
+import { Chip } from '@mui/material'
+import {  useAtomValue } from 'jotai'
+import { serverStatusState } from '../utils/store'
+import { ServerStatus } from '../utils/const'
 
 function HeaderSection() {
+  const serverStatus = useAtomValue(serverStatusState)
   const [openInfo, setOpenInfo] = useState(false)
   const [appVersion, setAppVersion] = useState('')
   const isScrolled = useIsScrolled()
+
+  const getServerStatusChip = useCallback(() => {
+    switch (serverStatus) {
+      case ServerStatus.ONLINE:
+        return <Chip color='primary' variant='outlined' label='서버 실행중' />
+      case ServerStatus.OFFLINE:
+        return <Chip color='error' variant='outlined' label='서버 중지됨' />
+      case ServerStatus.STARTING:
+        return <Chip color='warning' variant='outlined' label='서버 시작중' />
+      default:
+        return <Chip color='error' variant='outlined' label='서버 OFFLINE' />
+    }
+  }, [serverStatus])
 
   useEffect(() => {
     // eslint-disable-next-line @typescript-eslint/no-floating-promises
@@ -67,7 +85,8 @@ function HeaderSection() {
             v{appVersion}
           </Typography>
         </Box>
-        <Box display="flex">
+        <Box display="flex" alignItems={"center"}>
+          {getServerStatusChip()}
           <Tooltip title="새로고침">
             <IconButton
               onClick={() => {

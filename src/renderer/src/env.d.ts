@@ -3,5 +3,6 @@
 interface Window {
   api: {
     getAppVersion: () => Promise<string>
+    startServer: () => Promise<boolean>
   }
 }

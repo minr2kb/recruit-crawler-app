@@ -1,6 +1,6 @@
 import axios from 'axios'
 import { type CategoryFilterType } from '../utils/types'
-import { BACKEND_URL, CATEGORY_PREFIX } from './consts'
+import { BACKEND_URL, CATEGORY_PREFIX } from './const'
 
 export const getCategoriesFromJumpit = async () => {
   try {

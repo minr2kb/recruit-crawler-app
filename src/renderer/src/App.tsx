@@ -9,11 +9,30 @@ import ConfigSection from './components/ConfigSection'
 import HeaderSection from './components/HeaderSection'
 import PlatformsSection from './components/PlatformsSection'
 import ResultSection from './components/ResultSection'
+import { useSetAtom } from 'jotai'
+import { serverStatusState } from './utils/store'
+import { ServerStatus } from './utils/const'
 
 function App() {
+  const setServerStatus = useSetAtom(serverStatusState)
+  
   useEffect(() => {
-    void healthCheck().catch(() => {
-      window.alert('서버가 꺼져있습니다.')
+    void healthCheck().then(()=>{
+      setServerStatus(ServerStatus.ONLINE)
+    }).catch(() => {
+      window.api.startServer().then(() => {
+        setServerStatus(ServerStatus.STARTING)
+        // 2초마다 체크하여 서버가 켜졌는지 확인
+        const interval = setInterval(() => {
+          void healthCheck().then(() => {
+            setServerStatus(ServerStatus.ONLINE)
+            clearInterval(interval)
+          })
+        }, 2000)
+      }).catch(() => {
+         setServerStatus(ServerStatus.OFFLINE)
+        window.alert('서버를 켜는데 실패했습니다.')
+      })
     })
   }, [])
 
