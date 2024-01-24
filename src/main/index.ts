@@ -86,7 +86,7 @@ autoUpdater.on('update-not-available', () => {
   log.info('현재 최신버전입니다.')
 })
 autoUpdater.on('error', (err) => {
-  log.info(`에러가 발생하였습니다. 에러내용 : ${err.message}`)
+  log.error(`에러가 발생하였습니다. 에러내용 : ${err.message}`)
 })
 autoUpdater.on('download-progress', (progressObj) => {
   let logMessage = `다운로드 속도: ${progressObj.bytesPerSecond}`
@@ -108,7 +108,6 @@ autoUpdater.on('update-downloaded', () => {
     })
     .then((result) => {
       const { response } = result
-
       if (response === 0) autoUpdater.quitAndInstall(false, true)
     })
 })
