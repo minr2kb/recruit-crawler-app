@@ -88,3 +88,22 @@ export const getPostsFromWantedByPageAPI =
     })
     return res.data
   }
+
+export const getPostsFromJobKoreaAPI =
+  (controller: AbortController) => async (position: string, cateKey: string, month?: number) => {
+    const res = await axios.get<ResultType[]>(`${BACKEND_URL}/${CRAWLER_PREFIX}/jobkorea`, {
+      params: { position, cateKey, month },
+      signal: controller.signal
+    })
+    return res.data
+  }
+
+export const getPostsFromJobKoreaByPageAPI =
+  (controller: AbortController) =>
+  async (position: string, cateKey: string, page: number, month?: number) => {
+    const res = await axios.get<ResultByPageType>(`${BACKEND_URL}/${CRAWLER_PREFIX}/jobkorea`, {
+      params: { position, cateKey, page, month },
+      signal: controller.signal
+    })
+    return res.data
+  }

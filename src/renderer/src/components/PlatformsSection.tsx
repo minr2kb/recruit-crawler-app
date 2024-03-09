@@ -5,6 +5,7 @@ import useJumpitCategories from '../hooks/useJumpitCategories'
 import useProgrammersCategories from '../hooks/useProgrammersCategories'
 import useRememberCategories from '../hooks/useRememberCategories'
 import useWantedCategories from '../hooks/useWantedCategories'
+import useJobKoreaCategories from '../hooks/useJobKoreaCategories';
 import { Platforms } from '../utils/const'
 import PlatformBlock from './PlatformBlock'
 
@@ -14,6 +15,7 @@ function PlatformsSection() {
   const { data: programmersCategories } = useProgrammersCategories()
   const { data: rememberCategories } = useRememberCategories()
   const { data: wantedCategories } = useWantedCategories()
+  const { data: jobkoreaCategories } = useJobKoreaCategories()
   return (
     <Paper variant="outlined" sx={{ p: 3, border: 'none', mt: 3 }}>
       <Typography variant="h5" sx={{ mb: 2 }}>
@@ -24,6 +26,7 @@ function PlatformsSection() {
       <PlatformBlock platform={Platforms.PROGRAMMERS} categories={programmersCategories} />
       <PlatformBlock platform={Platforms.REMEMBER} categories={rememberCategories} />
       <PlatformBlock platform={Platforms.WANTED} categories={wantedCategories} />
+      <PlatformBlock platform={Platforms.JOBKOREA} categories={jobkoreaCategories} />
     </Paper>
   )
 }

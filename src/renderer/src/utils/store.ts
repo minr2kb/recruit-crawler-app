@@ -19,3 +19,5 @@ export const selectedFieldsState = atomWithStorage<Array<{ label: string; key: s
 export const limitMonthsState = atomWithStorage<number>('sel_months', 3)
 
 export const progressLogState = atom<string | undefined>('')
+
+export const isCrawlingState = atom<boolean>(false)

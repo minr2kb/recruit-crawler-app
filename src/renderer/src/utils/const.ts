@@ -13,11 +13,12 @@ export enum Platforms {
   PROGRAMMERS = '프로그래머스',
   JOBPLANET = '잡플래닛',
   WANTED = '원티드',
-  REMEMBER = '리멤버'
+  REMEMBER = '리멤버',
+  JOBKOREA = '잡코리아'
 }
 
 export enum ServerStatus {
   ONLINE = 'ONLINE',
   OFFLINE = 'OFFLINE',
-  STARTING = 'STARTING',
- }
+  STARTING = 'STARTING'
+}

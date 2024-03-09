@@ -56,3 +56,13 @@ export const getCategoriesFromRemember = async () => {
     return []
   }
 }
+
+export const getCategoriesFromJobkorea = async () => {
+  try {
+    const res = await axios.get<CategoryFilterType[]>(`${BACKEND_URL}/${CATEGORY_PREFIX}/jobkorea`)
+    return res.data
+  } catch (e) {
+    console.error(e)
+    return []
+  }
+}

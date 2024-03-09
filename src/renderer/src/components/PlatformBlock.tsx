@@ -9,11 +9,11 @@ import Collapse from '@mui/material/Collapse'
 import Switch from '@mui/material/Switch'
 import Typography from '@mui/material/Typography'
 
-import { useAtom } from 'jotai/react'
+import { useAtom, useAtomValue } from 'jotai/react'
 import { useState } from 'react'
 
 import { type Platforms } from '../utils/const'
-import { selectedCategoriesState, selectedPlatformsState } from '../utils/store'
+import { isCrawlingState, selectedCategoriesState, selectedPlatformsState } from '../utils/store'
 import { type CategoryFilterType } from '../utils/types'
 import FilterModal from './FilterModal'
 
@@ -25,6 +25,7 @@ interface Props {
 function PlatformBlock({ platform, categories = [] }: Props) {
   const [selectedPlatforms, setSelectedPlatforms] = useAtom(selectedPlatformsState)
   const [selectedCategories, setSelectedCategories] = useAtom(selectedCategoriesState)
+  const isCrawling = useAtomValue(isCrawlingState)
   const [open, setOpen] = useState<boolean>(false)
   const [openCates, setOpenCates] = useState<boolean>(false)
 
@@ -72,6 +73,7 @@ function PlatformBlock({ platform, categories = [] }: Props) {
               onClick={(e) => {
                 e.stopPropagation()
               }}
+              disabled={isCrawling}
             />
           }
           onClick={handleClick}

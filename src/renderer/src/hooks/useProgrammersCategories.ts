@@ -1,10 +1,10 @@
 import { useQuery, type UseQueryOptions } from '@tanstack/react-query'
-import { getCategoriesFromProgrammers } from '../api/categories'
-import queryKeys from '../utils/query-keys'
-import { type CategoryFilterType } from '../utils/types'
 import { useAtomValue } from 'jotai'
-import { serverStatusState } from '../utils/store'
+import { getCategoriesFromProgrammers } from '../api/categories'
 import { ServerStatus } from '../utils/const'
+import queryKeys from '../utils/query-keys'
+import { serverStatusState } from '../utils/store'
+import { type CategoryFilterType } from '../utils/types'
 
 const useProgrammersCategories = ({
   options
@@ -21,7 +21,7 @@ const useProgrammersCategories = ({
     },
     {
       keepPreviousData: true,
-      enabled: serverStatus=== ServerStatus.ONLINE,
+      enabled: serverStatus === ServerStatus.ONLINE,
       ...options
     }
   )

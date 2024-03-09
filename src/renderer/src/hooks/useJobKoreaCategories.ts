@@ -1,21 +1,21 @@
 import { useQuery, type UseQueryOptions } from '@tanstack/react-query'
 import { useAtomValue } from 'jotai'
-import { getCategoriesFromWanted } from '../api/categories'
+import { getCategoriesFromJobkorea } from '../api/categories'
 import { ServerStatus } from '../utils/const'
 import queryKeys from '../utils/query-keys'
 import { serverStatusState } from '../utils/store'
 import { type CategoryFilterType } from '../utils/types'
 
-const useWantedCategories = ({
+const useJobKoreaCategories = ({
   options
 }: {
   options?: Omit<UseQueryOptions<CategoryFilterType[]>, 'queryFn' | 'queryKey'>
 } = {}) => {
   const serverStatus = useAtomValue(serverStatusState)
   return useQuery<CategoryFilterType[]>(
-    queryKeys.CATEGORIES('wanted'),
+    queryKeys.CATEGORIES('jobkorea'),
     async () => {
-      const res = await getCategoriesFromWanted()
+      const res = await getCategoriesFromJobkorea()
       return res
     },
     {
@@ -26,4 +26,4 @@ const useWantedCategories = ({
   )
 }
 
-export default useWantedCategories
+export default useJobKoreaCategories

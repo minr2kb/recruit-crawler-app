@@ -1,11 +1,11 @@
 import { useQuery, type UseQueryOptions } from '@tanstack/react-query'
 
 import axios, { HttpStatusCode } from 'axios'
-import queryKeys from '../utils/query-keys'
-import { type CategoryFilterType } from '../utils/types'
 import { useAtomValue } from 'jotai'
-import { serverStatusState } from '../utils/store'
 import { ServerStatus } from '../utils/const'
+import queryKeys from '../utils/query-keys'
+import { serverStatusState } from '../utils/store'
+import { type CategoryFilterType } from '../utils/types'
 
 export interface JobplanetCateDataType {
   label: string

@@ -30,13 +30,15 @@ import getPostsFromJumpit from '../utils/crawlers/jumpit'
 import getPostsFromProgrammers from '../utils/crawlers/programmers'
 import getPostsFromRemember from '../utils/crawlers/remember'
 import getPostsFromWanted from '../utils/crawlers/wanted'
+import getPostsFromJobKorea from '../utils/crawlers/jobkorea'
 import {
   serverStatusState,
   limitMonthsState,
   progressLogState,
   selectedCategoriesState,
   selectedFieldsState,
-  selectedPlatformsState
+  selectedPlatformsState,
+  isCrawlingState
 } from '../utils/store'
 import { type ResultType, type TotalResultType } from '../utils/types'
 
@@ -56,7 +58,7 @@ function ResultSection() {
   const consoleScrollRef = useRef<HTMLDivElement>(null)
 
   const [crawlResults, setCrawlResults] = useState<TotalResultType>()
-  const [isCrawling, setIsCrawling] = useState<boolean>(false)
+  const [isCrawling, setIsCrawling] = useAtom(isCrawlingState)
 
   const getFunc = (
     platform: Platforms,
@@ -73,6 +75,8 @@ function ResultSection() {
         return getPostsFromRemember(controller)
       case Platforms.WANTED:
         return getPostsFromWanted(controller)
+      case Platforms.JOBKOREA:
+        return getPostsFromJobKorea(controller)
       default:
         return async () => []
     }
@@ -312,9 +316,17 @@ function ResultSection() {
                     flex: 1
                   }}
                 >
-                  <Typography gutterBottom variant="subtitle1" component="div">
-                    {platform}
-                  </Typography>
+                  <Box sx={{width: "100%", display: 'flex', alignItems: 'center', justifyContent:"space-between", mb: 1 }}>
+                    <Typography  variant="subtitle1" component="div">
+                      {platform}
+                    </Typography>
+                    <Chip
+                      label={(selectedCategories[platform] ?? []).length <= MAX_ASYNC_COUNT ? "ASYNC" : "SYNC"}
+                      color='default'
+                      size='small'
+
+                    />
+                  </Box>
                   {(!selectedCategories[platform] ||
                     selectedCategories[platform]?.length === 0) && (
                     <Typography variant="body2" color="text.secondary">
