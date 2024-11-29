@@ -1,8 +1,9 @@
 # recruit-crawler-app
 
-Electron + React + Vite + TS로 구성된 채용공고 크롤러 앱 입니다.
-ipc통신을 통해 로컬 접근 환경과 자체 node 서버 환경에서의 크롤러 구성이 가능합니다.
-또한 electron-updater를 통해 새로운 release마다 자동 업데이트를 지원합니다.
+- Electron + React + Vite + TS로 구성된 채용공고 크롤러 앱 입니다.
+- ipc통신을 통해 로컬 접근 환경과 자체 node 서버 환경에서의 크롤러 구성이 가능합니다.
+- electron-updater를 통해 새로운 release마다 자동 업데이트를 지원합니다.
+- [크롤링 서버 레포](https://github.com/minr2kb/recruit-crawler-back)
 <img width="1376" alt="스크린샷 2024-03-16 01 35 37" src="https://github.com/minr2kb/recruit-crawler-app/assets/77144827/96ce7118-e213-4efb-aa1e-01d744582a78">
 
 ## 지원 서비스
@@ -32,13 +33,14 @@ ipc통신을 통해 로컬 접근 환경과 자체 node 서버 환경에서의 �
 
 8. 크롤링 도중, STOP을 클릭하여 크롤링을 중지할 수 있습니다.
 
-### 그 외
+### 기타 feature
 
 - 크롤링 중 결과가 없거나 문제 발생시 직무 chip에 에러 인디케이터가 표시됩니다.
 
 - 원티드의 경우, 공고 날짜가 지원되지 않아 전체 공고 크롤링을 진행합니다.
 
 - 모든 요청은 기존적으로 병렬로 이루어지되, 서버 과부하 방지를 위해 5개 초과 카테고리는 동기 요청이 이루어집니다. 따라서 크롤링 속도가 느릴 수 있습니다. (플랫폼 이름 옆 SYNC/ASYNC 표시)
+
 
 ## 프로젝트 셋팅
 
