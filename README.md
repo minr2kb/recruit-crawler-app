@@ -1,20 +1,68 @@
 # recruit-crawler-app
-
-- Electron + React + Vite + TS로 구성된 채용공고 크롤러 앱 입니다.
-- ipc통신을 통해 로컬 접근 환경과 자체 node 서버 환경에서의 크롤러 구성이 가능합니다.
-- electron-updater를 통해 새로운 release마다 자동 업데이트를 지원합니다.
-- [크롤링 서버 레포](https://github.com/minr2kb/recruit-crawler-back)
 <img width="1376" alt="스크린샷 2024-03-16 01 35 37" src="https://github.com/minr2kb/recruit-crawler-app/assets/77144827/96ce7118-e213-4efb-aa1e-01d744582a78">
 
-## 지원 서비스
-- 잡코리아
-- 잡플래닛
-- 원티드
-- 리멤버
-- 점핏
-- 프로그래머스
+채용 공고 크롤러 데스크톱 애플리케이션입니다. 여러 채용 플랫폼의 채용 공고를 한번에 수집하고 관리할 수 있습니다.
+[크롤링 서버 레포](https://github.com/minr2kb/recruit-crawler-back)
 
-## 사용법
+## 🌟 주요기능
+- 6개 채용 플랫폼 지원 (잡코리아, 잡플래닛, 원티드, 리멤버, 점핏, 프로그래머스)
+- 플랫폼별 카테고리 필터링
+- 날짜 범위 설정을 통한 공고 필터링
+- CSV 형식의 결과 다운로드 (전체/플랫폼별)
+- 자동 업데이트 지원
+- 크롤링 진행상황 실시간 모니터링
+- 크롤링 중단/재시작 기능
+
+## 🎯 기술적 특징
+- Electron + React + TypeScript 기반의 크로스 플랫폼 데스크톱 앱
+- IPC 통신을 통한 메인 프로세스와 렌더러 프로세스 간 통신
+- electron-updater를 활용한 자동 업데이트 구현
+- 병렬 처리를 통한 크롤링 성능 최적화 (5개 이하 카테고리)
+- 서버 부하 방지를 위한 동기 처리 (5개 초과 카테고리)
+- Vite를 통한 빌드 최적화 및 코드 분할
+
+## 📁 프로젝트 구조
+```
+src/
+├── legacy/         # 기존 레거시 스크립트
+├── main/           # Electron 메인 프로세스
+├── preload/        # 프리로드 스크립트
+└── renderer/       # React 렌더러 프로세스
+    ├── src/
+    │   ├── api/      # API 통신 로직
+    │   ├── components/
+    │   ├── hooks/    # 커스텀 훅
+    │   └── utils/    # 유틸리티 함수
+    ...
+```
+
+## 🚀 시작하기
+```bash
+# 의존성 설치
+yarn
+
+# 개발 모드 실행
+yarn dev
+
+# 빌드
+yarn build:win    # Windows
+yarn build:mac    # macOS
+
+# 배포
+yarn deploy
+```
+
+## 🛠 기술 스택
+- Electron
+- React
+- TypeScript
+- Material-UI
+- Vite
+- Jotai
+- React Query
+- Axios
+
+## 📱 사용 방법
 0. 최신 release 에서 운영체제에 맞는 파일을 설치해줍니다.
 
 1. 서버가 실행중인지 확인 후, Config에서 공고 날짜 범위, 필드를 선택해줍니다.
@@ -41,36 +89,26 @@
 
 - 모든 요청은 기존적으로 병렬로 이루어지되, 서버 과부하 방지를 위해 5개 초과 카테고리는 동기 요청이 이루어집니다. 따라서 크롤링 속도가 느릴 수 있습니다. (플랫폼 이름 옆 SYNC/ASYNC 표시)
 
+## 👨‍💻 개발자
+Kyungbae Min (kyungbae@publy.co)
 
-## 프로젝트 셋팅
-
-
-### Install
-
-```bash
-$ yarn
-```
-
-### Development
-
-```bash
-$ yarn dev
-```
-
-### Build
-
-```bash
-# For windows
-$ yarn build:win
-
-# For macOS
-$ yarn build:mac
-
-# For Linux
-$ yarn build:linux
-```
-
-### Deploy
-```bash
-$ yarn deploy
-```
+## 더 고민하면 좋을점
+### 보안 강화
+- API 키 관리 방식 개선
+- 크롤링 요청에 대한 rate limiting 구현
+### 에러 처리 개선
+- 크롤링 실패 시 재시도 메커니즘 구현
+- 상세한 에러 로깅 및 모니터링 시스템 도입
+### 성능 최적화
+- 메모리 사용량 최적화
+- 대용량 데이터 처리 시 청크 단위 처리 도입
+### 테스트 코드 추가
+- 단위 테스트 및 E2E 테스트 구현
+- CI/CD 파이프라인 구축
+### 사용자 경험 개선
+- 오프라인 모드 지원
+- 크롤링 결과 히스토리 관리
+- 검색 및 필터링 기능 강화
+### 확장성
+- 플러그인 시스템 도입으로 새로운 플랫폼 쉽게 추가
+- 커스텀 필터 설정 기능
